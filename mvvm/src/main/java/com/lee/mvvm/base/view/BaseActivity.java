@@ -28,7 +28,7 @@ public abstract class BaseActivity<B extends ViewDataBinding, VM extends IBaseVi
         initView();
         vm = initVM();
         if (vm != null) {
-            vm.attacheView(this);
+            vm.attacheView();
         }
         loadData(getIntent().getExtras());
     }
@@ -67,7 +67,7 @@ public abstract class BaseActivity<B extends ViewDataBinding, VM extends IBaseVi
 
     @Override
     protected void onDestroy() {
-        vm.viewDetached(this);
+        vm.viewDetached();
         EventBus.getDefault().unregister(this);
         super.onDestroy();
     }

@@ -41,7 +41,7 @@ public abstract class BaseFragment<B extends ViewDataBinding, VM extends IBaseVi
             initView();
             vm = initVM();
             if (vm != null) {
-                vm.attacheView(this);
+                vm.attacheView();
             }
             loadData(getArguments());
         } else if (container != null) {
@@ -58,6 +58,9 @@ public abstract class BaseFragment<B extends ViewDataBinding, VM extends IBaseVi
 
     @Override
     public void onDestroy() {
+        if (vm != null) {
+            vm.viewDetached();
+        }
         EventBus.getDefault().unregister(this);
         super.onDestroy();
     }

@@ -63,7 +63,7 @@ public abstract class BaseLazyFragment<B extends ViewDataBinding, VM extends IBa
             initView();
             vm = initVM();
             if (vm != null) {
-                vm.attacheView(this);
+                vm.attacheView();
             }
             loadData(getArguments());
             loading = false;
@@ -75,6 +75,9 @@ public abstract class BaseLazyFragment<B extends ViewDataBinding, VM extends IBa
 
     @Override
     public void onDestroy() {
+        if (vm != null) {
+            vm.viewDetached();
+        }
         EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
