@@ -11,6 +11,8 @@ import com.lee.mvvm.base.constract.IBaseViewModel;
 import com.lee.mvvm.utils.LifeCycleHelper;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
+import org.greenrobot.eventbus.EventBus;
+
 public abstract class BaseActivity<B extends ViewDataBinding, VM extends IBaseViewModel> extends RxAppCompatActivity
         implements IBaseView {
 
@@ -21,6 +23,7 @@ public abstract class BaseActivity<B extends ViewDataBinding, VM extends IBaseVi
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         binding = DataBindingUtil.setContentView(this, bindView());
         initView();
         vm = initVM();
@@ -65,6 +68,7 @@ public abstract class BaseActivity<B extends ViewDataBinding, VM extends IBaseVi
     @Override
     protected void onDestroy() {
         vm.viewDetached(this);
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
 }

@@ -15,6 +15,8 @@ import com.lee.mvvm.base.constract.IBaseViewModel;
 import com.lee.mvvm.utils.LifeCycleHelper;
 import com.trello.rxlifecycle2.components.support.RxFragment;
 
+import org.greenrobot.eventbus.EventBus;
+
 public abstract class BaseFragment<B extends ViewDataBinding, VM extends IBaseViewModel> extends RxFragment
         implements IBaseView {
 
@@ -23,6 +25,12 @@ public abstract class BaseFragment<B extends ViewDataBinding, VM extends IBaseVi
     protected B binding;
 
     protected VM vm;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+    }
 
     @Nullable
     @Override
@@ -48,6 +56,11 @@ public abstract class BaseFragment<B extends ViewDataBinding, VM extends IBaseVi
         return new LifeCycleHelper(this);
     }
 
+    @Override
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
 
     /**
      * 获取到databinding将要绑定的布局Id
