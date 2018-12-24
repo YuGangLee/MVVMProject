@@ -67,7 +67,9 @@ public abstract class BaseActivity<B extends ViewDataBinding, VM extends IBaseVi
 
     @Override
     protected void onDestroy() {
-        vm.viewDetached();
+        if (vm != null) {
+            vm.viewDetached();
+        }
         EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
