@@ -10,12 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.lee.mvvm.base.constract.IBaseView;
-import com.lee.mvvm.base.constract.IBaseViewModel;
+import com.lee.mvvm.base.view.intf.IBaseView;
+import com.lee.mvvm.base.view_model.BaseViewModel;
 import com.lee.mvvm.utils.LifeCycleHelper;
 import com.trello.rxlifecycle2.components.support.RxFragment;
 
-public abstract class BaseFragment<B extends ViewDataBinding, VM extends IBaseViewModel> extends RxFragment
+public abstract class BaseFragment<B extends ViewDataBinding, VM extends BaseViewModel> extends RxFragment
         implements IBaseView {
 
     private View baseView;
@@ -34,7 +34,6 @@ public abstract class BaseFragment<B extends ViewDataBinding, VM extends IBaseVi
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (baseView == null) {
             binding = DataBindingUtil.inflate(inflater, bindView(), container, false);
-            binding.setLifecycleOwner(this);
             baseView = binding.getRoot();
             initView();
             vm = initVM();
@@ -42,6 +41,7 @@ public abstract class BaseFragment<B extends ViewDataBinding, VM extends IBaseVi
                 vm.attacheView();
             }
             loadData(getArguments());
+            binding.setLifecycleOwner(this);
         } else if (container != null) {
             ViewGroup viewGroup = (ViewGroup) container.getParent();
             viewGroup.removeView(this.baseView);

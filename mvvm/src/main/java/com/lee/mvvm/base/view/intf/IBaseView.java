@@ -1,4 +1,4 @@
-package com.lee.mvvm.base.constract;
+package com.lee.mvvm.base.view.intf;
 
 import com.lee.mvvm.utils.LifeCycleHelper;
 

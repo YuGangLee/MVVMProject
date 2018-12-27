@@ -1,12 +1,15 @@
 package com.lee.mvvmproject;
 
 import android.os.Bundle;
+import android.view.View;
 
-import com.lee.mvvm.base.constract.IBaseViewModel;
 import com.lee.mvvm.base.view.BaseActivity;
+import com.lee.mvvmproject.databinding.ActivityMainBinding;
+
+import java.util.Random;
 
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewModel> {
 
     @Override
     protected int bindView() {
@@ -19,12 +22,17 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    protected IBaseViewModel initVM() {
-        return null;
+    protected MainViewModel initVM() {
+        return new MainViewModel();
     }
 
     @Override
     protected void loadData(Bundle dataFromIntent) {
+        binding.setVm(vm);
+    }
 
+    public void testLiveData(View view) {
+        Random random = new Random();
+        vm.data.setValue("Random-->" + String.valueOf(random.nextInt()));
     }
 }
