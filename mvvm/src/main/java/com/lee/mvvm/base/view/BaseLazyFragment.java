@@ -16,8 +16,6 @@ import com.lee.mvvm.base.constract.IBaseViewModel;
 import com.lee.mvvm.utils.LifeCycleHelper;
 import com.trello.rxlifecycle2.components.support.RxFragment;
 
-import org.greenrobot.eventbus.EventBus;
-
 public abstract class BaseLazyFragment<B extends ViewDataBinding, VM extends IBaseViewModel> extends RxFragment
         implements IBaseView {
 
@@ -34,7 +32,6 @@ public abstract class BaseLazyFragment<B extends ViewDataBinding, VM extends IBa
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EventBus.getDefault().register(this);
     }
 
     @Nullable
@@ -83,7 +80,6 @@ public abstract class BaseLazyFragment<B extends ViewDataBinding, VM extends IBa
         if (vm != null) {
             vm.viewDetached();
         }
-        EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
 
