@@ -34,6 +34,7 @@ public abstract class BaseFragment<B extends ViewDataBinding, VM extends IBaseVi
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (baseView == null) {
             binding = DataBindingUtil.inflate(inflater, bindView(), container, false);
+            binding.setLifecycleOwner(this);
             baseView = binding.getRoot();
             initView();
             vm = initVM();

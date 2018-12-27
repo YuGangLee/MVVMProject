@@ -22,6 +22,7 @@ public abstract class BaseActivity<B extends ViewDataBinding, VM extends IBaseVi
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, bindView());
+        binding.setLifecycleOwner(this);
         initView();
         vm = initVM();
         if (vm != null) {

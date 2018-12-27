@@ -39,6 +39,7 @@ public abstract class BaseLazyFragment<B extends ViewDataBinding, VM extends IBa
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (baseView == null) {
             binding = DataBindingUtil.inflate(inflater, bindView(), container, false);
+            binding.setLifecycleOwner(this);
             baseView = binding.getRoot();
             try {
                 lazeView = inflater.inflate(setLazyView(), container, false);
