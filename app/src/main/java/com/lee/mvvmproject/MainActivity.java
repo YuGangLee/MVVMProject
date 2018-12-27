@@ -10,7 +10,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected int bindView() {
-        return 0;
+        return R.layout.activity_main;
     }
 
     @Override

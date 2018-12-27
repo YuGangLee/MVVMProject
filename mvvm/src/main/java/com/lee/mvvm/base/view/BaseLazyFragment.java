@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,8 +43,12 @@ public abstract class BaseLazyFragment<B extends ViewDataBinding, VM extends IBa
         if (baseView == null) {
             binding = DataBindingUtil.inflate(inflater, bindView(), container, false);
             baseView = binding.getRoot();
-            lazeView = inflater.inflate(setLazyView(), container, false);
-            ((ViewGroup) baseView).addView(lazeView);
+            try {
+                lazeView = inflater.inflate(setLazyView(), container, false);
+                ((ViewGroup) baseView).addView(lazeView);
+            } catch (Exception ignored) {
+                Log.w("BaseLazyFragment", "onCreateView: no lazy view");
+            }
         } else if (container != null) {
             ViewGroup viewGroup = (ViewGroup) container.getParent();
             viewGroup.removeView(this.baseView);
