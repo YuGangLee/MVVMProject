@@ -12,11 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lee.mvvm.base.view.intf.IBaseView;
-import com.lee.mvvm.base.view_model.BaseViewModel;
 import com.lee.mvvm.utils.LifeCycleHelper;
 import com.trello.rxlifecycle2.components.support.RxFragment;
 
-public abstract class BaseLazyFragment<B extends ViewDataBinding, VM extends BaseViewModel> extends RxFragment
+public abstract class BaseLazyFragment<B extends ViewDataBinding, VM> extends RxFragment
         implements IBaseView {
 
     private View baseView;
@@ -64,9 +63,6 @@ public abstract class BaseLazyFragment<B extends ViewDataBinding, VM extends Bas
         if (getUserVisibleHint() && loading) {
             initView();
             vm = initVM();
-            if (vm != null) {
-                vm.attacheView();
-            }
             loadData(getArguments());
             binding.setLifecycleOwner(this);
             loading = false;
@@ -74,14 +70,6 @@ public abstract class BaseLazyFragment<B extends ViewDataBinding, VM extends Bas
                 ((ViewGroup) baseView).removeView(lazeView);
             }
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        if (vm != null) {
-            vm.viewDetached();
-        }
-        super.onDestroy();
     }
 
     /**

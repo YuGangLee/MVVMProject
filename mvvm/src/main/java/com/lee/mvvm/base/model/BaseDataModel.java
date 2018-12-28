@@ -3,7 +3,7 @@ package com.lee.mvvm.base.model;
 import android.databinding.Observable;
 import android.databinding.PropertyChangeRegistry;
 
-public abstract class BaseModel implements Observable {
+public abstract class BaseDataModel implements Observable {
 
     private transient PropertyChangeRegistry propertyChangeRegistry = new PropertyChangeRegistry();
 

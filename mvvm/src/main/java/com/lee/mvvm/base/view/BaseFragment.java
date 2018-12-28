@@ -11,11 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lee.mvvm.base.view.intf.IBaseView;
-import com.lee.mvvm.base.view_model.BaseViewModel;
 import com.lee.mvvm.utils.LifeCycleHelper;
 import com.trello.rxlifecycle2.components.support.RxFragment;
 
-public abstract class BaseFragment<B extends ViewDataBinding, VM extends BaseViewModel> extends RxFragment
+public abstract class BaseFragment<B extends ViewDataBinding, VM> extends RxFragment
         implements IBaseView {
 
     private View baseView;
@@ -37,9 +36,6 @@ public abstract class BaseFragment<B extends ViewDataBinding, VM extends BaseVie
             baseView = binding.getRoot();
             initView();
             vm = initVM();
-            if (vm != null) {
-                vm.attacheView();
-            }
             loadData(getArguments());
             binding.setLifecycleOwner(this);
         } else if (container != null) {
@@ -52,14 +48,6 @@ public abstract class BaseFragment<B extends ViewDataBinding, VM extends BaseVie
     @Override
     public LifeCycleHelper getDefaultLifeCycle() {
         return new LifeCycleHelper(this);
-    }
-
-    @Override
-    public void onDestroy() {
-        if (vm != null) {
-            vm.viewDetached();
-        }
-        super.onDestroy();
     }
 
     /**

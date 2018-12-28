@@ -7,11 +7,10 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 
 import com.lee.mvvm.base.view.intf.IBaseView;
-import com.lee.mvvm.base.view_model.BaseViewModel;
 import com.lee.mvvm.utils.LifeCycleHelper;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
-public abstract class BaseActivity<B extends ViewDataBinding, VM extends BaseViewModel> extends RxAppCompatActivity
+public abstract class BaseActivity<B extends ViewDataBinding, VM> extends RxAppCompatActivity
         implements IBaseView {
 
     protected B binding;
@@ -24,9 +23,6 @@ public abstract class BaseActivity<B extends ViewDataBinding, VM extends BaseVie
         binding = DataBindingUtil.setContentView(this, bindView());
         vm = initVM();
         initView();
-        if (vm != null) {
-            vm.attacheView();
-        }
         loadData(getIntent().getExtras());
         binding.setLifecycleOwner(this);
     }
@@ -65,9 +61,6 @@ public abstract class BaseActivity<B extends ViewDataBinding, VM extends BaseVie
 
     @Override
     protected void onDestroy() {
-        if (vm != null) {
-            vm.viewDetached();
-        }
         super.onDestroy();
     }
 }
