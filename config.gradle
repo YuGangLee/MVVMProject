@@ -1,0 +1,38 @@
+ext {
+    //android开发版本配置
+    android = [
+            compileSdkVersion: 28,
+            buildToolsVersion: "28.0.0",
+            applicationId    : "com.lee.mvvmproject",
+            minSdkVersion    : 20,
+            targetSdkVersion : 28,
+            versionCode      : 1,
+            versionName      : "1.0.0-beta-01",
+    ]
+    //version配置
+    versions = [
+            support_version      : "28.0.0",
+            rxlifecycle_version  : "2.2.2",
+            recycleview_version  : "28.0.0",
+            rxjava_version       : "2.2.5",
+            rxandroid_version    : "2.1.0",
+            archlifecycle_version: "1.1.1",
+    ]
+    //support配置
+    support = [
+            support_v4     : "com.android.support:support-v4:$versions.support_version",
+            appcompat_v7   : "com.android.support:appcompat-v7:$versions.support_version",
+            recyclerview_v7: "com.android.support:recyclerview-v7:$versions.recycleview_version",
+            design         : "com.android.support:design:$versions.support_version",
+    ]
+    //依赖第三方配置
+    dependencies = [
+            rxlifecycle               : "com.trello.rxlifecycle2:rxlifecycle:$versions.rxlifecycle_version",
+            rxlifecycle_android       : "com.trello.rxlifecycle2:rxlifecycle-android:$versions.rxlifecycle_version",
+            rxlifecycle_components    : "com.trello.rxlifecycle2:rxlifecycle-components:$versions.rxlifecycle_version",
+            rxjava                    : "io.reactivex.rxjava2:rxjava:$versions.rxjava_version",
+            rxandroid                 : "io.reactivex.rxjava2:rxandroid:$versions.rxandroid_version",
+            archlifecycle_extentions  : "android.arch.lifecycle:extensions:$versions.archlifecycle_version",
+            archlifecycle_common_java8: "android.arch.lifecycle:common-java8:$versions.archlifecycle_version",
+    ]
+}
