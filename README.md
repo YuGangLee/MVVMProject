@@ -6,9 +6,9 @@
 默认使用RxJava+RxLifecycle进行观察者生命周期控制  
 集成Databinding & <a href="https://github.com/JeremyLiao/LiveEventBus">LiveEventBus</a>
 
-提供了支持懒加载的Fragment：LazyFragment
-提供了支持Databinding的RecycleView.BaseAdapter & ViewHolder
-提供了支持空布局的RecycleView
+提供了支持懒加载的Fragment：LazyFragment   
+提供了支持Databinding的RecycleView.BaseAdapter & ViewHolder   
+提供了支持空布局的RecycleView   
 
 本项目目的在于搭建一个基本骨架，为保证灵活性没有使用太多的三方库
 
