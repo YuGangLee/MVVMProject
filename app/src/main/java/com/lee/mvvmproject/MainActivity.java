@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.lee.mvvm.base.view.BaseActivity;
+import com.lee.mvvm.liveeventbus.LiveEventBus;
 import com.lee.mvvmproject.databinding.ActivityMainBinding;
 
 import java.util.Random;
@@ -18,12 +19,12 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
 
     @Override
     protected void initView() {
-
+        LiveEventBus.get().with("test", String.class).observe(this, (s) -> vm.data.setValue(s));
     }
 
     @Override
     protected MainViewModel initVM() {
-        return new MainViewModel();
+        return getDefaultVMInstance(MainViewModel.class);
     }
 
     @Override

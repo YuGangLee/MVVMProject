@@ -1,5 +1,7 @@
 package com.lee.mvvm.base.view;
 
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
@@ -15,7 +17,7 @@ import com.lee.mvvm.base.view.intf.IBaseView;
 import com.lee.mvvm.utils.LifeCycleHelper;
 import com.trello.rxlifecycle2.components.support.RxFragment;
 
-public abstract class BaseLazyFragment<B extends ViewDataBinding, VM> extends RxFragment
+public abstract class BaseLazyFragment<B extends ViewDataBinding, VM extends ViewModel> extends RxFragment
         implements IBaseView {
 
     private View baseView;
@@ -57,6 +59,10 @@ public abstract class BaseLazyFragment<B extends ViewDataBinding, VM> extends Rx
     @Override
     public LifeCycleHelper getDefaultLifeCycle() {
         return new LifeCycleHelper(this);
+    }
+
+    protected VM getDefaultVMInstance(Class<VM> vmClass) {
+        return ViewModelProviders.of(this).get(getClass().getName(), vmClass);
     }
 
     private void lazyLoad() {
