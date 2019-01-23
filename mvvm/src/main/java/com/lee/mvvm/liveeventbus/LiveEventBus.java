@@ -34,8 +34,16 @@ public final class LiveEventBus {
     }
 
     public synchronized <T> Observable<T> with(String key, Class<T> type) {
+        return with(key, type, null);
+    }
+
+    public synchronized <T> Observable<T> with(String key, Class<T> type, Lifecycle.State activeState) {
         if (!bus.containsKey(key)) {
-            bus.put(key, new BusLiveEvent<>(key));
+            BusLiveEvent event = new BusLiveEvent<>(key);
+            if (activeState != null) {
+                event.activeState = activeState;
+            }
+            bus.put(key, event);
         }
         return (Observable<T>) bus.get(key);
     }
@@ -77,17 +85,20 @@ public final class LiveEventBus {
             }
         }
 
+        private Lifecycle.State activeState;
+
         @NonNull
         private final String key;
         private Handler mainHandler = new Handler(Looper.getMainLooper());
 
         private BusLiveEvent(String key) {
             this.key = key;
+            this.activeState = super.observerActiveLevel();
         }
 
         @Override
         protected Lifecycle.State observerActiveLevel() {
-            return super.observerActiveLevel();
+            return activeState;
         }
 
         @Override

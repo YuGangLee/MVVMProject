@@ -1,6 +1,11 @@
 package com.lee.mvvmproject;
 
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleOwner;
+import android.arch.lifecycle.LifecycleRegistry;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 
 import com.lee.mvvm.base.view.BaseActivity;
@@ -11,6 +16,7 @@ import java.util.Random;
 
 
 public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewModel> {
+    Test test;
 
     @Override
     protected int bindView() {
@@ -19,7 +25,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
 
     @Override
     protected void initView() {
-        LiveEventBus.get().with("test", String.class).observe(this, (s) -> vm.data.setValue(s));
     }
 
     @Override
@@ -30,10 +35,53 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
     @Override
     protected void loadData(Bundle dataFromIntent) {
         binding.setVm(vm);
+        test = new Test();
+        test.resume();
     }
 
     public void testLiveData(View view) {
-        Random random = new Random();
-        vm.data.setValue("Random-->" + String.valueOf(random.nextInt()));
+//        Random random = new Random();
+//        vm.data.setValue("Random-->" + String.valueOf(random.nextInt()));
+        test.create();
+        startActivity(new Intent(this, TestActivity.class));
+    }
+
+    class Test implements LifecycleOwner {
+
+        LifecycleRegistry registry;
+
+        Test() {
+            registry = new LifecycleRegistry(this);
+            init();
+            LiveEventBus.get()
+                    .with("test", String.class, Lifecycle.State.RESUMED)
+                    .observe(this, (s) -> vm.data.setValue(s));
+        }
+
+        @NonNull
+        @Override
+        public Lifecycle getLifecycle() {
+            return registry;
+        }
+
+        void init() {
+            registry.markState(Lifecycle.State.INITIALIZED);
+        }
+
+        void create() {
+            registry.markState(Lifecycle.State.CREATED);
+        }
+
+        void start() {
+            registry.markState(Lifecycle.State.STARTED);
+        }
+
+        void resume() {
+            registry.markState(Lifecycle.State.RESUMED);
+        }
+
+        void destroy() {
+            registry.markState(Lifecycle.State.DESTROYED);
+        }
     }
 }
