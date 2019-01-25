@@ -33,17 +33,11 @@ public final class LiveEventBus {
         return SingletonHolder.DEFAULT_BUS;
     }
 
-    public synchronized <T> Observable<T> with(String key, Class<T> type) {
-        return with(key, type, null);
-    }
+    private boolean lifecycleObserverAlwaysActive = true;
 
-    public synchronized <T> Observable<T> with(String key, Class<T> type, Lifecycle.State activeState) {
+    public synchronized <T> Observable<T> with(String key, Class<T> type) {
         if (!bus.containsKey(key)) {
-            BusLiveEvent event = new BusLiveEvent<>(key);
-            if (activeState != null) {
-                event.activeState = activeState;
-            }
-            bus.put(key, event);
+            bus.put(key, new BusLiveEvent<>(key));
         }
         return (Observable<T>) bus.get(key);
     }
@@ -52,10 +46,16 @@ public final class LiveEventBus {
         return with(key, Object.class);
     }
 
+    public void lifecycleObserverAlwaysActive(boolean active) {
+        lifecycleObserverAlwaysActive = active;
+    }
+
     public interface Observable<T> {
         void setValue(T value);
 
         void postValue(T value);
+
+        void postValueDelay(T value, long delay);
 
         void postValueDelay(T value, long delay, TimeUnit unit);
 
@@ -70,7 +70,7 @@ public final class LiveEventBus {
         void removeObserver(@NonNull Observer<T> observer);
     }
 
-    private static class BusLiveEvent<T> extends LiveEvent<T> implements Observable<T> {
+    private class BusLiveEvent<T> extends LiveEvent<T> implements Observable<T> {
 
         private class PostValueTask implements Runnable {
             private Object newValue;
@@ -85,25 +85,27 @@ public final class LiveEventBus {
             }
         }
 
-        private Lifecycle.State activeState;
-
         @NonNull
         private final String key;
         private Handler mainHandler = new Handler(Looper.getMainLooper());
 
         private BusLiveEvent(String key) {
             this.key = key;
-            this.activeState = super.observerActiveLevel();
         }
 
         @Override
         protected Lifecycle.State observerActiveLevel() {
-            return activeState;
+            return lifecycleObserverAlwaysActive ? Lifecycle.State.CREATED : Lifecycle.State.RESUMED;
+        }
+
+        @Override
+        public void postValueDelay(T value, long delay) {
+            mainHandler.postDelayed(new PostValueTask(value), delay);
         }
 
         @Override
         public void postValueDelay(T value, long delay, TimeUnit unit) {
-            mainHandler.postDelayed(new PostValueTask(value), unit.convert(delay, unit));
+            postValueDelay(value, TimeUnit.MILLISECONDS.convert(delay, unit));
         }
 
         @Override

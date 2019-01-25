@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.lee.mvvm.base.view.BaseActivity;
 import com.lee.mvvm.liveeventbus.LiveEventBus;
+import com.lee.mvvm.liveeventbus.liveevent.LiveEvent;
 import com.lee.mvvmproject.databinding.ActivityMainBinding;
 
 import java.util.Random;
@@ -25,6 +26,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
 
     @Override
     protected void initView() {
+        LiveEventBus.get()
+                .lifecycleObserverAlwaysActive(false);
     }
 
     @Override
@@ -39,11 +42,24 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
         test.resume();
     }
 
+    boolean aBoolean;
+
     public void testLiveData(View view) {
 //        Random random = new Random();
 //        vm.data.setValue("Random-->" + String.valueOf(random.nextInt()));
         test.create();
-        startActivity(new Intent(this, TestActivity.class));
+//        startActivity(new Intent(this, TestActivity.class));
+        LiveEventBus.get().with("test", String.class).postValue("testtest");
+        aBoolean = true;
+        test.resume();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (aBoolean) {
+            test.resume();
+        }
     }
 
     class Test implements LifecycleOwner {
@@ -53,9 +69,11 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
         Test() {
             registry = new LifecycleRegistry(this);
             init();
+            create();
+            resume();
             LiveEventBus.get()
-                    .with("test", String.class, Lifecycle.State.RESUMED)
-                    .observe(this, (s) -> vm.data.setValue(s));
+                    .with("test", String.class)
+                    .observe(Test.this, (s) -> vm.data.setValue(s));
         }
 
         @NonNull

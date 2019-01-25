@@ -41,15 +41,19 @@ public class MainThreadManager {
     private volatile Handler mMainHandler;
 
     public void postToMainThread(Runnable runnable) {
-        if (mMainHandler == null) {
-            synchronized (mLock) {
-                if (mMainHandler == null) {
-                    mMainHandler = new Handler(Looper.getMainLooper());
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            runnable.run();
+        } else {
+            if (mMainHandler == null) {
+                synchronized (mLock) {
+                    if (mMainHandler == null) {
+                        mMainHandler = new Handler(Looper.getMainLooper());
+                    }
                 }
             }
+            //noinspection ConstantConditions
+            mMainHandler.post(runnable);
         }
-        //noinspection ConstantConditions
-        mMainHandler.post(runnable);
     }
 
     public boolean isMainThread() {

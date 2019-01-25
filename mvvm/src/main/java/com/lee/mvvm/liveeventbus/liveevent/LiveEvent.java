@@ -423,13 +423,15 @@ public abstract class LiveEvent<T> {
             mActive = newActive;
             boolean wasInactive = LiveEvent.this.mActiveCount == 0;
             LiveEvent.this.mActiveCount += mActive ? 1 : -1;
+            boolean justActive = false;
             if (wasInactive && mActive) {
+                justActive = true;
                 onActive();
             }
             if (LiveEvent.this.mActiveCount == 0 && !mActive) {
                 onInactive();
             }
-            if (mActive) {
+            if (mActive && !justActive) {
                 dispatchingValue(this);
             }
         }
