@@ -19,7 +19,7 @@ import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 public abstract class BaseActivity<B extends ViewDataBinding, VM extends ViewModel> extends RxAppCompatActivity
         implements IBaseView {
     public static final String START_ACTIVITY = "com.lee.mvvm.base.view.BaseActivity:START_ACTIVITY";
-    public static final String QUIT_APP = "com.lee.mvvm.base.view.BaseActivity:FINISH_APP";
+    public static final String QUIT_APP = "com.lee.mvvm.base.view.BaseActivity:QUIT_APP";
 
     protected B binding;
     protected VM vm;
