@@ -20,9 +20,7 @@ public abstract class BaseFragment<B extends ViewDataBinding, VM extends ViewMod
         implements IBaseView {
 
     private View baseView;
-
     protected B binding;
-
     protected VM vm;
 
     @Override
@@ -53,6 +51,9 @@ public abstract class BaseFragment<B extends ViewDataBinding, VM extends ViewMod
     }
 
     protected VM getDefaultVMInstance(Class<VM> vmClass) {
+        if (getActivity() != null) {
+            return ViewModelProviders.of(getActivity()).get(getActivity().getClass().getName(), vmClass);
+        }
         return ViewModelProviders.of(this).get(getClass().getName(), vmClass);
     }
 

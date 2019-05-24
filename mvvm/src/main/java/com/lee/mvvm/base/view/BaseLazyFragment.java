@@ -21,13 +21,9 @@ public abstract class BaseLazyFragment<B extends ViewDataBinding, VM extends Vie
         implements IBaseView {
 
     private View baseView;
-
     private View lazeView;
-
     protected B binding;
-
     protected VM vm;
-
     boolean loading;
 
     @Override
@@ -62,6 +58,9 @@ public abstract class BaseLazyFragment<B extends ViewDataBinding, VM extends Vie
     }
 
     protected VM getDefaultVMInstance(Class<VM> vmClass) {
+        if (getActivity() != null) {
+            return ViewModelProviders.of(getActivity()).get(getActivity().getClass().getName(), vmClass);
+        }
         return ViewModelProviders.of(this).get(getClass().getName(), vmClass);
     }
 
