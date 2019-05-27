@@ -1,16 +1,17 @@
 package com.lee.mvvmproject;
 
-import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleOwner;
-import android.arch.lifecycle.LifecycleRegistry;
-import android.content.Intent;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LifecycleRegistry;
+
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
+
 import android.view.View;
 
+import com.jeremyliao.liveeventbus.LiveEventBus;
 import com.lee.mvvm.base.view.BaseActivity;
-import com.lee.mvvm.liveeventbus.LiveEventBus;
-import com.lee.mvvm.liveeventbus.liveevent.LiveEvent;
 import com.lee.mvvmproject.databinding.ActivityMainBinding;
 
 import java.util.Random;
@@ -26,8 +27,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
 
     @Override
     protected void initView() {
-        LiveEventBus.get()
-                .lifecycleObserverAlwaysActive(false);
     }
 
     @Override
@@ -45,11 +44,10 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
     boolean aBoolean;
 
     public void testLiveData(View view) {
-//        Random random = new Random();
-//        vm.data.setValue("Random-->" + String.valueOf(random.nextInt()));
+        Random random = new Random();
         test.create();
 //        startActivity(new Intent(this, TestActivity.class));
-        LiveEventBus.get().with("test", String.class).postValue("testtest");
+        LiveEventBus.get().with("test", String.class).post("Random-->" + String.valueOf(random.nextInt()));
         aBoolean = true;
         test.resume();
     }

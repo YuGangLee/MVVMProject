@@ -1,7 +1,7 @@
 package com.lee.mvvm.base.model;
 
-import android.databinding.Observable;
-import android.databinding.PropertyChangeRegistry;
+import androidx.databinding.Observable;
+import androidx.databinding.PropertyChangeRegistry;
 
 public abstract class BaseDataModel implements Observable {
 

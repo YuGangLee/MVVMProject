@@ -1,18 +1,17 @@
 package com.lee.mvvm.base.view;
 
 import android.app.Activity;
-import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
-import android.databinding.ViewDataBinding;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.Nullable;
 
+import com.jeremyliao.liveeventbus.LiveEventBus;
 import com.lee.mvvm.base.view.intf.IBaseView;
-import com.lee.mvvm.liveeventbus.LiveEventBus;
 import com.lee.mvvm.utils.LifeCycleHelper;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
@@ -48,10 +47,10 @@ public abstract class BaseActivity<B extends ViewDataBinding, VM extends ViewMod
      */
     protected void preSet() {
         LiveEventBus.get()
-                .with(START_ACTIVITY, Bundle.class)
+                .with(START_ACTIVITY, StartActivityBundle.class)
                 .observe(this, bundle -> {
                     if (isFront && bundle != null) {
-                        startActivity(getClass(), bundle);
+                        startActivity(bundle.activityClass, bundle.data);
                     }
                 });
         LiveEventBus.get()
@@ -124,6 +123,29 @@ public abstract class BaseActivity<B extends ViewDataBinding, VM extends ViewMod
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    public static class StartActivityBundle {
+        private Class<BaseActivity> activityClass;
+        private Bundle data;
+
+        public Class<BaseActivity> getActivityClass() {
+            return activityClass;
+        }
+
+        public StartActivityBundle setActivityClass(Class<BaseActivity> activityClass) {
+            this.activityClass = activityClass;
+            return this;
+        }
+
+        public Bundle getData() {
+            return data;
+        }
+
+        public StartActivityBundle setData(Bundle data) {
+            this.data = data;
+            return this;
+        }
     }
 
     public interface IInterceptor {
