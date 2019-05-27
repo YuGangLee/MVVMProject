@@ -57,13 +57,13 @@ public class EmptyRecyclerView extends RecyclerView {
 
     public void setEmptyView(@NonNull View view) {
         this.mEmptyView = view;
-        ((ViewGroup) this.getParent()).addView(mEmptyView);
+        ((ViewGroup) this.getParent()).addView(mEmptyView, ((ViewGroup) this.getParent()).indexOfChild(this));
     }
 
     public void setEmptyView(@LayoutRes int layoutId) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         this.mEmptyView = inflater.inflate(layoutId, (ViewGroup) getParent(), false);
-        ((ViewGroup) this.getParent()).addView(mEmptyView);
+        ((ViewGroup) this.getParent()).addView(mEmptyView, ((ViewGroup) this.getParent()).indexOfChild(this));
     }
 
     public void setAdapter(RecyclerView.Adapter adapter) {
