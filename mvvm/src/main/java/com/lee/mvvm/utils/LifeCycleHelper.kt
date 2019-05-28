@@ -1,19 +1,13 @@
-package com.lee.mvvm.utils;
+package com.lee.mvvm.utils
 
-import com.trello.rxlifecycle2.LifecycleProvider;
 
-import io.reactivex.Observable;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
+import com.trello.rxlifecycle3.LifecycleProvider
+import io.reactivex.Observable
+import io.reactivex.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
-public class LifeCycleHelper {
-
-    private LifecycleProvider lifecycleProvider;
-
-    public LifeCycleHelper(LifecycleProvider lifecycleProvider) {
-        this.lifecycleProvider = lifecycleProvider;
-    }
+class LifeCycleHelper(private val lifecycleProvider: LifecycleProvider<*>?) {
 
     /**
      * 开始进行事件订阅
@@ -21,21 +15,21 @@ public class LifeCycleHelper {
      * @param observable 被观察者
      * @param observer   观察者
      */
-    public void startObserve(Observable observable, Observer observer) {
+    fun startObserve(observable: Observable<*>?, observer: Observer<Any?>?) {
         if (observable == null || observer == null) {
-            return;
+            return
         }
         if (lifecycleProvider != null) {
             observable.observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .unsubscribeOn(Schedulers.io())
                     .compose(lifecycleProvider.bindToLifecycle())
-                    .subscribe(observer);
+                    .subscribe(observer)
         } else {
             observable.observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .unsubscribeOn(Schedulers.io())
-                    .subscribe(observer);
+                    .subscribe(observer)
         }
     }
 }
