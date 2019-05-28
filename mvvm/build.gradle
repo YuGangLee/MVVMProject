@@ -32,10 +32,7 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.0.2'
     api 'androidx.recyclerview:recyclerview:1.0.0'
-    api 'com.trello.rxlifecycle3:rxlifecycle:3.0.0'
-    api 'com.trello.rxlifecycle3:rxlifecycle-android:3.0.0'
     api 'com.trello.rxlifecycle3:rxlifecycle-components:3.0.0'
-    api 'com.trello.rxlifecycle3:rxlifecycle-components-preference:3.0.0'
     api 'com.trello.rxlifecycle3:rxlifecycle-kotlin:3.0.0'
     api 'com.trello.rxlifecycle3:rxlifecycle-android-lifecycle-kotlin:3.0.0'
     api "io.reactivex.rxjava2:rxjava:2.2.7"
