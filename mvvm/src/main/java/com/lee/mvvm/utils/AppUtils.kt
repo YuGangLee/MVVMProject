@@ -101,28 +101,6 @@ object AppUtils {
 
         }
 
-    /**
-     * 判断目标activity是否在前台运行
-     *
-     * @param className Activity Name
-     * @return is running on foreground
-     */
-    fun isActivityForeground(className: String): Boolean {
-        val context = context
-        if (context == null || TextUtils.isEmpty(className)) {
-            return false
-        }
-
-        val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-                ?: return false
-        val list = manager.getRunningTasks(1)
-        if (list != null && list.size > 0) {
-            val cpn = list[0].topActivity
-            return className == cpn.className
-        }
-        return false
-    }
-
     private fun <T> checkNotNull(obj: T?) {
         if (obj == null) {
             throw NullPointerException()
@@ -144,14 +122,7 @@ object AppUtils {
 
     val versionCode: String
         get() {
-            var versionCode = -1
-            try {
-                versionCode = context!!.packageManager
-                        .getPackageInfo(context!!.packageName, PackageManager.GET_ACTIVITIES)
-                        .versionCode
-            } catch (e: PackageManager.NameNotFoundException) {
-                e.printStackTrace()
-            }
+            val versionCode = Build.VERSION.SDK_INT
 
             return if (versionCode == -1) "UnKnow" else versionCode.toString()
         }
