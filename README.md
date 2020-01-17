@@ -1,4 +1,4 @@
-# MVVMProject
+# MVVMProject(不严谨以及过时的设计)
 
 ### 一个简单的MVVM框架实现
 
