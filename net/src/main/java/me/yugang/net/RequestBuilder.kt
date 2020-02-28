@@ -6,6 +6,8 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
 
 class RequestBuilder {
     companion object {
@@ -42,6 +44,11 @@ class RequestBuilder {
     fun upJson(json: String): RequestBuilder {
         val mediaType = JSON_MEDIA_TYPE.toMediaType()
         bodies.add(json.toRequestBody(mediaType))
+        return this
+    }
+
+    fun putFile(file: File): RequestBuilder {
+        bodies.add(file.asRequestBody())
         return this
     }
 

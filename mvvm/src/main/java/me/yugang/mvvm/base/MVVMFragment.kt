@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import me.yugang.mvvm.base.intf.ViewInterface
 
 abstract class MVVMFragment<T : ViewDataBinding> : Fragment(), ViewInterface {
@@ -32,6 +34,12 @@ abstract class MVVMFragment<T : ViewDataBinding> : Fragment(), ViewInterface {
             isInit = true
         }
     }
+
+    fun <T : ViewModel> getDefaultViewModel(vmClass: Class<T>): T =
+        ViewModelProvider(this).get(vmClass)
+
+    fun <T : ViewModel> getActivityViewModel(vmClass: Class<T>): T =
+        ViewModelProvider(requireActivity()).get(vmClass)
 
     /**
      * 使用Jetpack的Navigation组件进行Fragment管理时,在当前Fragment进入不处于当前导航栈栈顶的时候

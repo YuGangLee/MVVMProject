@@ -60,6 +60,8 @@ class RequestHolder private constructor(request: Request) {
         }
     }
 
+    fun getCall(): Call = call
+
     private inner class RequestCallback : Callback {
         override fun onFailure(call: Call, e: IOException) {
             onFailure(e)
