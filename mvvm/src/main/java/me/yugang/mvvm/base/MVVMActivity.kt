@@ -14,6 +14,7 @@ abstract class MVVMActivity<T : ViewDataBinding> : AppCompatActivity(), ViewInte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, layout())
+        binding.lifecycleOwner = this
         initView()
         loadData(intent.extras)
     }

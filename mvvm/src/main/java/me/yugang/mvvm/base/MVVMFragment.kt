@@ -22,6 +22,7 @@ abstract class MVVMFragment<T : ViewDataBinding> : Fragment(), ViewInterface {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, layout(), container, false)
+        binding.lifecycleOwner = this
         return binding.root
     }
 
