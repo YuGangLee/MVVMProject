@@ -98,8 +98,12 @@ class RequestBuilder {
             bodies.forEach { multipartBuilder.addPart(it) }
             multipartBuilder.build()
         } else if (bodies.isNotEmpty()) {
-            bodies.forEach { multipartBuilder.addPart(it) }
-            multipartBuilder.build()
+            if (bodies.size == 1) {
+                return bodies[0]
+            } else {
+                bodies.forEach { multipartBuilder.addPart(it) }
+                multipartBuilder.build()
+            }
         } else {
             formBuilder.build()
         }
