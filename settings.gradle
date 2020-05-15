@@ -1,3 +1,4 @@
 include ':app', ':mvvm'
 rootProject.name='MVVMProject'
 include ':net'
+include ':utils'
