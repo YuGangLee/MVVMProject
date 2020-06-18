@@ -64,14 +64,13 @@ class RequestBuilder {
 
     fun build(): Request {
         val builder = Request.Builder()
-        builder.url(url)
         headers.forEach { entry -> builder.addHeader(entry.key, entry.value) }
         when (requestMethod) {
             RequestMethod.GET -> {
                 if (params.isNotEmpty()) {
-                    url.plus("?")
+                    url = url.plus("?")
                     params.forEach { entry ->
-                        url.plus("${entry.key}=${entry.value}&")
+                        url = url.plus("${entry.key}=${entry.value}&")
                     }
                     url = url.substring(0, url.length - 1)
                 }
@@ -86,6 +85,7 @@ class RequestBuilder {
                 builder.delete(createRequestBody())
             }
         }
+        builder.url(url)
         return builder.build()
     }
 
