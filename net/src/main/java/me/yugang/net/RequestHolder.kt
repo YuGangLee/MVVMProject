@@ -1,32 +1,16 @@
 package me.yugang.net
 
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.Request
-import okhttp3.Response
+import okhttp3.*
 import java.io.IOException
 import java.lang.Exception
 
-class RequestHolder private constructor(request: Request) {
+class RequestHolder internal constructor(request: Request) {
+    private val httpClient = OkConnection.httpClient
 
-    companion object {
-        /**
-         * 支持自定义HttpClient
-         */
-        var httpClient = DefaultClient.httpClient
+    val call: Call = httpClient.newCall(request)
 
-        fun newRequest(request: Request): RequestHolder {
-            return RequestHolder(request)
-        }
-    }
-
-    private var call: Call
     private var onFailure: (exception: Exception) -> Unit = {}
     private var onResponse: (response: Response) -> Unit = {}
-
-    init {
-        call = httpClient.newCall(request)
-    }
 
     fun onCallback(
         onResponse: (response: Response) -> Unit,
@@ -59,8 +43,6 @@ class RequestHolder private constructor(request: Request) {
             null
         }
     }
-
-    fun getCall(): Call = call
 
     private inner class RequestCallback : Callback {
         override fun onFailure(call: Call, e: IOException) {

@@ -108,11 +108,4 @@ class RequestBuilder {
             formBuilder.build()
         }
     }
-
-    enum class RequestMethod {
-        GET,
-        POST,
-        PUT,
-        DELETE
-    }
 }

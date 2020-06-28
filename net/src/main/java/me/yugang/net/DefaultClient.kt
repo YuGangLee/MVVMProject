@@ -12,7 +12,7 @@ object DefaultClient {
     private const val MAX_IDLE_CONNECTIONS = 5
     private const val CONNECTION_KEEP_ALIVE_SEC = 5L
 
-    var showLog = false
+    var showLog = BuildConfig.DEBUG
 
     val httpClient: OkHttpClient = OkHttpClient.Builder()
         .connectTimeout(CONNECT_TIMEOUT_SEC, TimeUnit.SECONDS)
@@ -26,17 +26,19 @@ object DefaultClient {
             )
         )
         .cookieJar(MemoryCookieJar())
-        .addInterceptor(HttpLoggingInterceptor(HttpLogger())
-            .apply {
-                level = HttpLoggingInterceptor.Level.BODY
-            })
+        .also {
+            if (showLog) {
+                it.addInterceptor(HttpLoggingInterceptor(HttpLogger())
+                    .apply {
+                        level = HttpLoggingInterceptor.Level.BODY
+                    })
+            }
+        }
         .build()
 
     private class HttpLogger : HttpLoggingInterceptor.Logger {
         override fun log(message: String) {
-            if (showLog) {
-                Log.i("okhttp", message)
-            }
+            Log.i("okhttp", message)
         }
     }
 
