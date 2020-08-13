@@ -7,17 +7,20 @@ import java.lang.Exception
 class RequestHolder internal constructor(request: Request) {
     private val httpClient = OkConnection.httpClient
 
-    val call: Call = httpClient.newCall(request)
+    private val call: Call = httpClient.newCall(request)
 
-    private var onFailure: (exception: Exception) -> Unit = {}
+    private var onFailure: (exception: Throwable) -> Unit = {}
     private var onResponse: (response: Response) -> Unit = {}
+    private var onFinish: () -> Unit = {}
 
     fun onCallback(
         onResponse: (response: Response) -> Unit,
-        onFailure: (exception: Exception) -> Unit
+        onFailure: (exception: Throwable) -> Unit,
+        onFinish: () -> Unit
     ): RequestHolder {
         this.onResponse = onResponse
         this.onFailure = onFailure
+        this.onFinish = onFinish
         return this
     }
 
@@ -26,8 +29,13 @@ class RequestHolder internal constructor(request: Request) {
         return this
     }
 
-    fun onFailure(callback: (exception: Exception) -> Unit): RequestHolder {
+    fun onFailure(callback: (exception: Throwable) -> Unit): RequestHolder {
         onFailure = callback
+        return this
+    }
+
+    fun onFinish(callback: () -> Unit): RequestHolder {
+        onFinish = callback
         return this
     }
 
@@ -47,6 +55,7 @@ class RequestHolder internal constructor(request: Request) {
     private inner class RequestCallback : Callback {
         override fun onFailure(call: Call, e: IOException) {
             onFailure(e)
+            onFinish()
         }
 
         override fun onResponse(call: Call, response: Response) {
@@ -54,6 +63,8 @@ class RequestHolder internal constructor(request: Request) {
                 onResponse(response)
             } catch (e: Exception) {
                 onFailure(e)
+            } finally {
+                onFinish()
             }
         }
     }
