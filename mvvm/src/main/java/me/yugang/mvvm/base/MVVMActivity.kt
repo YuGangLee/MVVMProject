@@ -21,4 +21,15 @@ abstract class MVVMActivity<T : ViewDataBinding> : AppCompatActivity(), ViewInte
 
     fun <T : ViewModel> getDefaultViewModel(vmClass: Class<T>): T =
         ViewModelProvider(this).get(vmClass)
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putAll(saveInstanceState() ?: return)
+    }
+
+    override fun saveInstanceState(): Bundle? {
+        return null
+    }
+
+    override fun onReset(savedInstanceState: Bundle?) {}
 }
