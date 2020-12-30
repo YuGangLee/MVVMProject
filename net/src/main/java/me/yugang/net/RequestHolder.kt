@@ -1,10 +1,13 @@
 package me.yugang.net
 
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import okhttp3.*
 import java.io.IOException
 import java.lang.Exception
 
-class RequestHolder internal constructor(request: Request) {
+class RequestHolder internal constructor(request: Request) : LifecycleEventObserver {
     private val httpClient = OkConnection.httpClient
 
     private val call: Call = httpClient.newCall(request)
@@ -12,16 +15,17 @@ class RequestHolder internal constructor(request: Request) {
     private var onFailure: (exception: Throwable) -> Unit = {}
     private var onResponse: (response: Response) -> Unit = {}
     private var onFinish: () -> Unit = {}
+    private var mCancelOnEvent = Lifecycle.Event.ON_DESTROY
+    private var mLifecycleOwner: LifecycleOwner? = null
 
-    fun onCallback(
-        onResponse: (response: Response) -> Unit,
-        onFailure: (exception: Throwable) -> Unit,
-        onFinish: () -> Unit
-    ): RequestHolder {
-        this.onResponse = onResponse
-        this.onFailure = onFailure
-        this.onFinish = onFinish
-        return this
+    @JvmOverloads
+    fun with(
+        lifecycleOwner: LifecycleOwner,
+        cancelOnEvent: Lifecycle.Event = Lifecycle.Event.ON_DESTROY
+    ) {
+        lifecycleOwner.lifecycle.addObserver(this)
+        mLifecycleOwner = lifecycleOwner
+        mCancelOnEvent = cancelOnEvent
     }
 
     fun onResponse(callback: (response: Response) -> Unit): RequestHolder {
@@ -39,17 +43,9 @@ class RequestHolder internal constructor(request: Request) {
         return this
     }
 
-    fun executeAsync(): Call {
+    fun execute(): Call {
         call.enqueue(RequestCallback())
         return call
-    }
-
-    fun executeSync(): Response? {
-        return try {
-            call.execute()
-        } catch (e: IOException) {
-            null
-        }
     }
 
     private inner class RequestCallback : Callback {
@@ -65,7 +61,18 @@ class RequestHolder internal constructor(request: Request) {
                 onFailure(e)
             } finally {
                 onFinish()
+                mLifecycleOwner?.lifecycle?.removeObserver(this@RequestHolder)
             }
+        }
+    }
+
+    override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
+        if (event == mCancelOnEvent && !call.isCanceled()) {
+            call.cancel()
+        }
+        if (event == Lifecycle.Event.ON_DESTROY) {
+            mLifecycleOwner?.lifecycle?.removeObserver(this)
+            mLifecycleOwner = null
         }
     }
 }
