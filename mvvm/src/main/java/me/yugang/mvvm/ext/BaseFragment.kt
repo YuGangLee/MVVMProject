@@ -1,18 +1,15 @@
-package me.yugang.mvvm.base
+package me.yugang.mvvm.ext
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import me.yugang.mvvm.base.intf.ViewInterface
+import me.yugang.mvvm.intf.ViewInterface
 
-abstract class MVVMFragment<T : ViewDataBinding> : Fragment(), ViewInterface {
-    lateinit var binding: T
+abstract class BaseFragment : Fragment(), ViewInterface {
 
     private var isInit = false
 
@@ -21,9 +18,7 @@ abstract class MVVMFragment<T : ViewDataBinding> : Fragment(), ViewInterface {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, layout(), container, false)
-        binding.lifecycleOwner = this
-        return binding.root
+        return inflater.inflate(layoutRes, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

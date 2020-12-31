@@ -11,7 +11,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         Toaster.config(R.layout.view_toaster) { view, content ->
-            view.tvToastContent.text = content
+            view?.tvToastContent?.text = content
         }
         Toaster.with(this).showShort("Test")
     }

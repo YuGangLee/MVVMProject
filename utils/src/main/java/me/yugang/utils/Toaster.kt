@@ -1,6 +1,7 @@
 package me.yugang.utils
 
 import android.content.Context
+import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -9,12 +10,18 @@ import android.widget.Toast
 import androidx.annotation.LayoutRes
 import java.lang.ref.SoftReference
 
+/**
+ * after [Build.VERSION_CODES.R] is no longer support
+ *
+ * @see Toast.setView
+ */
+@Deprecated("No longer supported after api ${Build.VERSION_CODES.R}")
 object Toaster {
     private var softReference: SoftReference<MyToast?> = SoftReference(null)
 
     @LayoutRes
     private var layoutRes = -1
-    private var toastContentSetter: (view: View, content: String) -> Unit = { _, _ -> }
+    private var toastContentSetter: (view: View?, content: String) -> Unit = { _, _ -> }
 
     fun with(context: Context): MyToast {
         synchronized(this) {
@@ -31,7 +38,7 @@ object Toaster {
         return softReference.get()!!
     }
 
-    fun config(@LayoutRes layout: Int, toastContentSetter: (view: View, content: String) -> Unit) {
+    fun config(@LayoutRes layout: Int, toastContentSetter: (view: View?, content: String) -> Unit) {
         this.layoutRes = layout
         this.toastContentSetter = toastContentSetter
     }

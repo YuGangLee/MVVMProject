@@ -1,20 +1,16 @@
-package me.yugang.mvvm.base
+package me.yugang.mvvm.ext
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import me.yugang.mvvm.base.intf.ViewInterface
+import me.yugang.mvvm.intf.ViewInterface
 
-abstract class MVVMActivity<T : ViewDataBinding> : AppCompatActivity(), ViewInterface {
-    lateinit var binding: T
+abstract class BaseActivity : KeyboardActivity(), ViewInterface {
+    val ACTIVITY_TAG = this.javaClass.name
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, layout())
-        binding.lifecycleOwner = this
+        setContentView(layoutRes)
         initView()
         loadData(intent.extras)
     }

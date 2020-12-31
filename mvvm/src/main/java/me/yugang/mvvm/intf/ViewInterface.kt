@@ -1,11 +1,10 @@
-package me.yugang.mvvm.base.intf
+package me.yugang.mvvm.intf
 
 import android.os.Bundle
 import androidx.annotation.LayoutRes
 
 interface ViewInterface {
-    @LayoutRes
-    fun layout(): Int
+    val layoutRes: Int
 
     fun initView()
 
