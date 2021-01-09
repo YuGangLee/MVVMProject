@@ -1,0 +1,2 @@
+-keep class me.yugang.mvvm.* { *; }
+-keep class me.yugang.mvvm.** { *; }
